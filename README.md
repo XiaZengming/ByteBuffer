@@ -1,7 +1,33 @@
 # ByteBuffer
+
+[XiaZengming/ByteBuffer: C#版ByteBuffer类，方便在网络通信中的字节操作](https://github.com/XiaZengming/ByteBuffer)
+
 C#版ByteBuffer类，方便在网络通信中的字节操作，参考自java-netty4的ByteBuf .
 
+此类仅支持大端模式
 
+
+
+申请缓冲区
+
+```c#
+// 1.申请指定长度的缓冲区
+ByteBuffer buf = ByteBuffer.Allocate(256);//new byte[256]
+
+// 2.根据byte[]初始化
+byte[] data = new byte[512];
+ByteBuffer buf = ByteBuffer.Allocate(data);
+
+// 3.支持对象池的申请，池化申请
+ByteBuffer buf = ByteBuffer.Allocate(256,true);
+
+// 4.归还对象池（必须是池化对象）
+buf.Dispose();
+
+// 5.写入用Write，读取用Read
+buf.WriteInt(1234);
+int v = buf.ReadInt();
+```
 
 
 
@@ -17,8 +43,8 @@ ByteBuf buf = allocator.directBuffer(256,512);
 buf.writeByte(59);
 buf.writeShort(1000);
 buf.writeInt(12345);
-buf.writeLong(12345678L);
-buf.writeBytes("牛啊牛啊".getBytes("UTF-8"));
+buf.writeLong(12345678L); //8字节
+buf.writeBytes("牛啊牛啊".getBytes("UTF-8")); //12字节
 out.write(ByteBufUtil.getBytes(buf));
 out.close();
 ```
